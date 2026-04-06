@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install — agem</title>
+  <meta name="description" content="Install agem in seconds with a single curl command. Supports macOS, Linux, and Windows.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="index.html" class="logo"><span class="dim">$</span> <span class="accent">agem</span></a>
+    <button id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="install.html">Install</a>
+      <a href="docs.html">Docs</a>
+      <a href="compare.html">Compare</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="gh-link">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="page-hero">
+    <div class="container">
+      <h1>Install agem</h1>
+      <p>One command to get started. Works on macOS, Linux, and Windows. Node.js and pnpm handled for you.</p>
+    </div>
+  </div>
+
+  <div class="container install-sections" style="padding-top:0; max-width:800px;">
+
+    <!-- Quick install macOS/Linux -->
+    <section id="quick-install">
+      <h2>⚡ Quick Install — macOS &amp; Linux</h2>
+      <p>Run the install script. It detects your OS, downloads the latest release, and adds <code>agem</code> to your PATH.</p>
+      <pre><code>curl -fsSL https://raw.githubusercontent.com/Purple-Druid/AgentEmerald/main/install.sh | sh</code></pre>
+      <p>After installation, run:</p>
+      <pre><code>agem</code></pre>
+    </section>
+
+    <!-- Windows -->
+    <section id="windows">
+      <h2>🪟 Windows — PowerShell</h2>
+      <p>Open PowerShell as Administrator and run:</p>
+      <pre><code>irm https://raw.githubusercontent.com/Purple-Druid/AgentEmerald/main/install.ps1 | iex</code></pre>
+      <p>Windows Subsystem for Linux (WSL) is also supported — use the macOS/Linux script inside WSL.</p>
+    </section>
+
+    <!-- Options -->
+    <section id="options">
+      <h2>🛠️ Installer Options</h2>
+      <p>Pass flags to the install script to customise behaviour:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Flag</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--dir &lt;path&gt;</code></td><td>Install to a custom directory</td><td><code>~/.agem</code></td></tr>
+            <tr><td><code>--no-gh</code></td><td>Skip GitHub CLI installation check</td><td>off</td></tr>
+            <tr><td><code>--no-node</code></td><td>Skip Node.js installation check</td><td>off</td></tr>
+            <tr><td><code>--version &lt;tag&gt;</code></td><td>Install a specific release tag</td><td>latest</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:16px;">Example with flags:</p>
+      <pre><code>curl -fsSL .../install.sh | sh -s -- --dir /opt/agem --version v0.1.0</code></pre>
+    </section>
+
+    <!-- Manual install -->
+    <section id="manual">
+      <h2>🔧 Manual Install</h2>
+      <p>If you prefer full control, clone the repo and build from source:</p>
+      <div class="step-block">
+        <div>
+          <p class="step-label">1. Clone the repository</p>
+          <pre><code>git clone https://github.com/Purple-Druid/AgentEmerald.git</code></pre>
+        </div>
+        <div>
+          <p class="step-label">2. Enter the directory</p>
+          <pre><code>cd AgentEmerald</code></pre>
+        </div>
+        <div>
+          <p class="step-label">3. Install dependencies</p>
+          <pre><code>pnpm install</code></pre>
+        </div>
+        <div>
+          <p class="step-label">4. Build the project</p>
+          <pre><code>pnpm run build</code></pre>
+        </div>
+        <div>
+          <p class="step-label">5. Authenticate with GitHub</p>
+          <pre><code>gh auth login</code></pre>
+        </div>
+        <div>
+          <p class="step-label">6. Start agem</p>
+          <pre><code>pnpm start</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standalone binary -->
+    <section id="binary">
+      <h2>📦 Standalone Binary</h2>
+      <p>Build a self-contained binary that doesn't require Node.js on the target machine:</p>
+      <pre><code>pnpm run release</code></pre>
+      <p>Then install it to your PATH:</p>
+      <pre><code>pnpm run install-bin</code></pre>
+      <p>The binary is placed in <code>~/.local/bin/agem</code> (Linux/macOS) or <code>%APPDATA%\agem\agem.exe</code> (Windows).</p>
+    </section>
+
+    <!-- First run -->
+    <section id="first-run">
+      <h2>🚀 First Run</h2>
+      <p>Launch the interactive TUI:</p>
+      <pre><code>agem</code></pre>
+      <p>Or start the background gateway daemon first (recommended for persistent sessions and chat bridges):</p>
+      <pre><code>agem gateway start</code></pre>
+      <p>Then connect the TUI to the running gateway:</p>
+      <pre><code>agem</code></pre>
+      <p>The TUI auto-connects to a running gateway — no extra config needed.</p>
+    </section>
+
+    <!-- Requirements -->
+    <section id="requirements">
+      <h2>📋 Requirements</h2>
+      <p>The install script handles these automatically. For manual installs, ensure you have:</p>
+      <ul>
+        <li><strong>Node.js ≥ 20</strong> — <a href="https://nodejs.org" target="_blank" rel="noopener" style="color:var(--accent)">nodejs.org</a></li>
+        <li><strong>pnpm ≥ 9</strong> — <code>npm install -g pnpm</code></li>
+        <li><strong>GitHub CLI</strong> — <a href="https://cli.github.com" target="_blank" rel="noopener" style="color:var(--accent)">cli.github.com</a> (for authentication)</li>
+      </ul>
+      <p style="margin-top:16px;">After installing the GitHub CLI, authenticate once:</p>
+      <pre><code>gh auth login</code></pre>
+      <p>That's it. No separate API keys, no paid accounts — just a GitHub login.</p>
+    </section>
+
+  </div>
+</main>
+
+<div class="cta-band">
+  <div class="container">
+    <h2>Ready to ship faster?</h2>
+    <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub ↗</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    MIT License · <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener">Open source on GitHub</a> · Built by Damien Hodgkin
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

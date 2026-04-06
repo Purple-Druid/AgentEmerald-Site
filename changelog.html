@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>agem — Changelog</title>
+  <meta name="description" content="What's new in agem — release notes and changelog.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="index.html" class="logo"><span class="dim">$</span> <span class="accent">agem</span></a>
+    <button id="hamburger" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <nav id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="install.html">Install</a>
+      <a href="docs.html">Docs</a>
+      <a href="compare.html">Compare</a>
+      <a href="changelog.html" class="active">Changelog</a>
+      <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="gh-link">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Changelog</h1>
+      <p class="lead">All notable changes to agem, in reverse chronological order.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="changelog">
+
+        <!-- Unreleased -->
+        <div class="cl-version">
+          <div class="cl-version-header">
+            <span class="cl-badge unreleased">Unreleased</span>
+            <h2>Unreleased</h2>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">2026-04-05</div>
+            <div class="cl-content">
+              <h3>Gateway auto-start</h3>
+              <ul>
+                <li><code>src/gateway/autoStart.ts</code> — <code>ensureGateway()</code> automatically starts the daemon when the TUI launches. Probes <code>/health</code>, spawns daemon if needed, polls until ready.</li>
+                <li>TUI startup wired to <code>gateway.autoStart</code> config value. Prints status to stderr.</li>
+                <li>14 unit tests covering all paths: already-running, started, timed-out, spawn-failed.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">2026-04-02</div>
+            <div class="cl-content">
+              <h3>Gateway hot reload</h3>
+              <ul>
+                <li><code>src/gateway/hotReload.ts</code> — <code>HotReloader</code> class: SIGHUP-driven config reload, channel diff + reconnect, scheduler reinit.</li>
+                <li><code>ChannelManager</code> gains <code>connectedChannelIds</code>, <code>disconnectChannel()</code>, <code>reconnectChannel()</code>.</li>
+                <li><code>JobScheduler.reinit()</code> — cancels all handles, reloads + reschedules from SQLite.</li>
+                <li>SIGHUP handler in <code>daemon.ts</code> now fires all registered hot-reload handlers.</li>
+                <li>7 unit tests covering all reload scenarios.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">2026-04-01</div>
+            <div class="cl-content">
+              <h3>Gateway daemon &amp; chat channel bridges</h3>
+              <ul>
+                <li><strong>Gateway daemon</strong> — persistent process with PID file, signal handling (SIGTERM/SIGINT/SIGHUP), graceful shutdown, systemd/launchd compatible.</li>
+                <li><strong>WebSocket server</strong> (port 7878) + <strong>HTTP REST API</strong> (port 7879) via Hono — <code>/health</code>, <code>/status</code>, <code>/sessions</code>, <code>/jobs</code>.</li>
+                <li><strong>SQLite persistence</strong> via <code>better-sqlite3</code> (WAL mode) — sessions, jobs, job_runs tables.</li>
+                <li><strong>JWT auth</strong> via <code>jose</code> (HS256) — disabled in dev mode.</li>
+                <li><strong>Job scheduler</strong> — cron, one-shot, interval jobs persisted to SQLite.</li>
+                <li><strong>Discord bridge</strong> — discord.js, mention-gated in guilds, DM always-on.</li>
+                <li><strong>Telegram bridge</strong> — grammy, mention-gated in groups, Markdown with plain-text fallback.</li>
+                <li><strong>WhatsApp bridge</strong> — Baileys 7.x, QR first-link, persistent auth in <code>~/.agem/wa-auth/</code>, composing indicator.</li>
+                <li><strong>Matrix bridge</strong> — matrix-js-sdk, auto-join invited rooms, typing indicator, history replay guard.</li>
+                <li><strong>TUI auto-connect hook</strong> — <code>useGatewayClient</code> probes health on mount, opens WS, reconnects with backoff, falls back silently.</li>
+                <li><strong>Install scripts</strong> — <code>install.sh</code> (macOS/Linux/WSL) and <code>install.ps1</code> (Windows PowerShell).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Earlier</div>
+            <div class="cl-content">
+              <h3>TUI &amp; agent improvements</h3>
+              <ul>
+                <li>Diff syntax highlighting in <code>```diff</code> code blocks (+green, -red, @@cyan)</li>
+                <li>Tool panel tier filter — <code>f</code> cycles all→read→write→shell; filtered count in header</li>
+                <li>Animated braille spinner in HeaderBar during agent processing</li>
+                <li>Right-panel tool activity sidebar — live feed of tool calls with color coding, j/k scroll, E expand</li>
+                <li>Session export — <code>/export [markdown|json]</code></li>
+                <li>Subagent progress tracking — <code>[N/M]</code> header badge with failure count</li>
+                <li>Session-timeout recovery — auto-compact + retry on Copilot SDK timeout errors</li>
+                <li><code>/branch-session</code> — fork current conversation into a new session</li>
+                <li>Approval dialogs — live diff preview before file writes in <code>normal</code> mode</li>
+                <li>Context pressure advisory — warns at ≥85% context fill, suggests a larger model</li>
+                <li><code>/sessions search &lt;query&gt;</code> — full-text search across all saved sessions</li>
+                <li><code>/verify --watch</code> — file-watch mode, reruns on source changes</li>
+                <li><code>/refactor &lt;old&gt; &lt;new&gt;</code> — cross-file symbol rename via code index</li>
+                <li><code>grepFiles</code> tool — ripgrep-powered content search, glob filter, 200-line cap</li>
+                <li>GitHub Models real context tracking — <code>Ctx%</code> bar uses provider token data</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- v0.1.0 -->
+        <div class="cl-version">
+          <div class="cl-version-header">
+            <span class="cl-badge release">v0.1.0</span>
+            <h2>v0.1.0 <span class="cl-release-date">— 2026-03-25</span></h2>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Phase 5</div>
+            <div class="cl-content">
+              <h3>Standalone binary distribution</h3>
+              <ul>
+                <li>esbuild bundle to <code>dist/agem.js</code></li>
+                <li><code>install-bin</code> script copies to <code>~/bin</code></li>
+                <li><code>/selfhost</code> command for structured self-hosting iterations</li>
+                <li><code>/release [--bump patch|minor|major]</code> — build → test → bundle → git tag pipeline</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Phase 4</div>
+            <div class="cl-content">
+              <h3>Frontier capability</h3>
+              <ul>
+                <li>Subagent delegation — <code>runSubagents()</code> + <code>/delegate</code> for parallel focused sub-tasks</li>
+                <li>Semantic code index — <code>/index</code> command and <code>codeIndex</code> tool with file-cache + content-hash invalidation</li>
+                <li>Telemetry hooks with per-turn and per-session aggregation; <code>/telemetry</code> command</li>
+                <li>Git-native workflow commands — <code>/commit</code>, <code>/branch</code>, <code>/pr</code>, <code>/plan</code>, <code>/review</code>, <code>/release</code></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Phase 3.5</div>
+            <div class="cl-content">
+              <h3>TUI overhaul</h3>
+              <ul>
+                <li>Token usage tracking and <code>UsageBar</code> with cost estimates and premium quota display</li>
+                <li>Interactive model / mode / reasoning-summary-length selectors in the header</li>
+                <li>Markdown rendering via <code>marked</code> lexer; streaming partial-fence fix</li>
+                <li>Collapsible tool output with <code>E</code> toggle</li>
+                <li>Vim-style input mode (ESC / i / a), persistent input history, tab-completed slash commands</li>
+                <li><code>commander</code>-based CLI; <code>--message</code> flag for non-interactive scripting / CI</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Phase 3</div>
+            <div class="cl-content">
+              <h3>Ecosystem parity</h3>
+              <ul>
+                <li>MCP client integration (stdio + SSE, multi-server merge)</li>
+                <li>Project-level instruction files (<code>.agem/instructions.md</code>) injected into every turn</li>
+                <li>Context compactor (<code>/compact</code>) with LLM-generated summaries</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Phase 2</div>
+            <div class="cl-content">
+              <h3>Workflow quality</h3>
+              <ul>
+                <li>Session persistence to <code>~/.agem/sessions/&lt;id&gt;.json</code>; <code>--resume</code> rehydrates store</li>
+                <li>Slash command registry with aliases and tab completion</li>
+                <li>Automated verification loop (<code>/verify</code>) with bounded retries</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cl-entry">
+            <div class="cl-date">Phase 1</div>
+            <div class="cl-content">
+              <h3>Reliability foundation</h3>
+              <ul>
+                <li>Three-tier safety policy: <code>read-only / write / dangerous</code> with execution modes</li>
+                <li>Workspace path guard preventing directory traversal</li>
+                <li>Patch-based <code>editFile</code> replacing whole-file overwrites</li>
+                <li>Shell execution hardening: argument validation, no shell interpolation, path restriction</li>
+                <li>Git status/diff wrappers (<code>/status</code>, <code>/commit</code>)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="cta-band">
+  <div class="container">
+    <h2>Ready to try it?</h2>
+    <a href="install.html" class="btn btn-primary">Install agem →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    MIT License · <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener">Open source on GitHub</a> · Built by Damien Hodgkin
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

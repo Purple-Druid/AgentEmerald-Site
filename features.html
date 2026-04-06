@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features — agem</title>
+  <meta name="description" content="Full breakdown of agem's features: TUI, daemon, chat bridges, safety, sessions, MCP, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="index.html" class="logo"><span class="dim">$</span> <span class="accent">agem</span></a>
+    <button id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="install.html">Install</a>
+      <a href="docs.html">Docs</a>
+      <a href="compare.html">Compare</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="gh-link">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="page-hero">
+    <div class="container">
+      <h1>Features</h1>
+      <p>Everything agem can do — from the terminal TUI to chat bridges, daemon, safety system, and extensibility.</p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:0;">
+
+    <!-- 1. TUI -->
+    <section class="features-section" id="tui">
+      <div class="section-header">
+        <span class="section-icon">🖥️</span>
+        <div>
+          <h2>Terminal UI</h2>
+          <p>A full-featured terminal interface built for developers who live in the shell. Streaming responses, rich markdown rendering, and full keyboard control — no mouse required.</p>
+        </div>
+      </div>
+      <ul>
+        <li>Streaming markdown output with syntax highlighting rendered inline</li>
+        <li>Live tool call sidebar — see every tool call as it happens (<kbd>j</kbd>/<kbd>k</kbd> to navigate, <kbd>E</kbd> to expand, <kbd>f</kbd> to filter by risk tier)</li>
+        <li>Animated spinner with live status messages during agent processing</li>
+        <li>Diff previews shown before any file write — approve or reject before changes land</li>
+        <li>Approval dialogs for dangerous tool calls in normal execution mode</li>
+        <li>Smooth scrolling through long responses with <kbd>PgUp</kbd>/<kbd>PgDn</kbd></li>
+        <li>Press <kbd>?</kbd> to open the keyboard help overlay at any time</li>
+        <li>Context usage bar showing token consumption at a glance</li>
+        <li>Model and execution mode selectors visible in the status bar</li>
+        <li>Vim-style input handling for power users</li>
+      </ul>
+    </section>
+
+    <!-- 2. Agent -->
+    <section class="features-section" id="agent">
+      <div class="section-header">
+        <span class="section-icon">🤖</span>
+        <div>
+          <h2>Agent Capabilities</h2>
+          <p>agem is a full autonomous coding agent. It reads your code, writes patches, runs commands, researches the web, delegates subtasks, and indexes your codebase for semantic search.</p>
+        </div>
+      </div>
+      <ul>
+        <li>21 built-in tools covering file I/O, shell execution, web research, memory, and more</li>
+        <li>Two model backends: GitHub Copilot and GitHub Models (no separate API key required)</li>
+        <li>Plan mode — reason through a task before executing any writes</li>
+        <li>Web research via DuckDuckGo search + URL fetch</li>
+        <li>Background tasks — spawn long-running jobs and check progress asynchronously</li>
+        <li>Git worktrees — isolated branches for parallel experiments, merged back on exit</li>
+        <li>Subagent delegation — spawn child agents to handle subtasks concurrently</li>
+        <li>Semantic code indexing — <code>codeIndex</code> tool queries symbols, functions, and types</li>
+        <li>Context compaction — automatically summarizes old messages to stay within token limits</li>
+        <li>Provider routing — route different task types to different models automatically</li>
+        <li>Git auto-commit after edits to maintain a clean working tree</li>
+        <li>Verify loop — run build/test commands after edits and iterate until passing</li>
+      </ul>
+    </section>
+
+    <!-- 3. Gateway -->
+    <section class="features-section" id="gateway">
+      <div class="section-header">
+        <span class="section-icon">⚙️</span>
+        <div>
+          <h2>The Gateway Daemon</h2>
+          <p>The gateway is a persistent background process that keeps agem alive after you close the terminal. It exposes a WebSocket and HTTP API, manages sessions in SQLite, and runs scheduled jobs.</p>
+        </div>
+      </div>
+      <ul>
+        <li>Persistent process — survives terminal closes, SSH disconnects, and reboots</li>
+        <li>WebSocket API on port <code>7878</code> for real-time streaming</li>
+        <li>HTTP REST API on port <code>7879</code> for programmatic access</li>
+        <li>SQLite-backed session storage — all conversations persisted automatically</li>
+        <li>Job scheduler — cron, interval, and one-shot jobs defined via HTTP or WS</li>
+        <li>SIGHUP hot reload — update config without restarting the daemon</li>
+        <li>Auto-start on <code>agem</code> launch — gateway starts if not already running</li>
+        <li>TUI auto-connect — the terminal UI connects to the gateway automatically</li>
+        <li>Channel adapters (Discord, Telegram, WhatsApp, Matrix) run inside the gateway</li>
+      </ul>
+    </section>
+
+    <!-- 4. Channels -->
+    <section class="features-section" id="channels">
+      <div class="section-header">
+        <span class="section-icon">📱</span>
+        <div>
+          <h2>Chat Platform Bridges</h2>
+          <p>agem's gateway bridges your codebase to the messaging platforms you already use. Each conversation gets its own isolated session — as if you opened a fresh terminal.</p>
+        </div>
+      </div>
+      <ul>
+        <li><strong>Discord</strong> — @mention the bot in any channel or DM to start a session</li>
+        <li><strong>Telegram</strong> — powered by grammY; responds to any message in allowed chats</li>
+        <li><strong>WhatsApp</strong> — QR code first-link, then persistent auth; works from your phone</li>
+        <li><strong>Matrix</strong> — auto-join invited rooms; works with self-hosted homeservers</li>
+        <li>Per-conversation session isolation — each chat thread has its own agent session</li>
+        <li>Session key namespacing — sessions are scoped by channel + conversation ID</li>
+        <li>Streaming responses delivered as message edits (where supported)</li>
+        <li>File upload support — send a file and agem reads it into context</li>
+      </ul>
+    </section>
+
+    <!-- 5. Safety -->
+    <section class="features-section" id="safety">
+      <div class="section-header">
+        <span class="section-icon">🛡️</span>
+        <div>
+          <h2>Safety &amp; Execution Modes</h2>
+          <p>agem gives you granular control over what the agent is allowed to do. Every tool call is classified by risk tier, and you choose how much autonomy to grant.</p>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin-bottom:24px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Mode</th>
+              <th>Description</th>
+              <th>Writes</th>
+              <th>Shell</th>
+              <th>Approval</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>auto-approve</code></td>
+              <td>Full autonomy — all tools run without prompting</td>
+              <td class="center badge">✅</td>
+              <td class="center badge">✅</td>
+              <td>Never</td>
+            </tr>
+            <tr>
+              <td><code>normal</code></td>
+              <td>Default — dangerous tools require approval</td>
+              <td class="center badge">✅</td>
+              <td class="center badge">🟡</td>
+              <td>Dangerous only</td>
+            </tr>
+            <tr>
+              <td><code>read-only</code></td>
+              <td>No writes — safe for auditing and exploration</td>
+              <td class="center badge">❌</td>
+              <td class="center badge">❌</td>
+              <td>N/A</td>
+            </tr>
+            <tr>
+              <td><code>plan</code></td>
+              <td>Reason and plan; no execution</td>
+              <td class="center badge">❌</td>
+              <td class="center badge">❌</td>
+              <td>N/A</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ul>
+        <li>Tool risk tiers: <span class="risk-read">read-only</span>, <span class="risk-write">write</span>, <span class="risk-danger">dangerous</span> — shown in the TUI sidebar</li>
+        <li>Workspace path guard — agent cannot read or write outside the configured workspace</li>
+        <li>Diff previews displayed before any <code>writeFile</code> or <code>editFile</code> call</li>
+        <li>Approval dialogs for <code>shellExec</code>, <code>taskCreate</code>, <code>taskStop</code> in normal mode</li>
+        <li>Tool tier filter in sidebar — hide low-risk calls to focus on what matters</li>
+      </ul>
+    </section>
+
+    <!-- 6. Sessions -->
+    <section class="features-section" id="sessions">
+      <div class="section-header">
+        <span class="section-icon">💾</span>
+        <div>
+          <h2>Session Management</h2>
+          <p>Sessions are first-class citizens in agem. Every conversation is saved, searchable, and branchable. Pick up where you left off — or fork a session to explore a different approach.</p>
+        </div>
+      </div>
+      <ul>
+        <li>Auto-save — every message persisted to SQLite immediately</li>
+        <li>Resume any session with <code>/sessions resume &lt;id&gt;</code></li>
+        <li>Fork a session with <code>/branch-session</code> — diverge without losing the original</li>
+        <li>Merge sessions back with <code>/sessions merge &lt;id&gt;</code></li>
+        <li>Diff two sessions with <code>/sessions diff &lt;id&gt; &lt;id&gt;</code></li>
+        <li>Full-text search with <code>/sessions search &lt;query&gt;</code></li>
+        <li>Export sessions as Markdown or JSON with <code>/sessions export</code></li>
+        <li>Auto-naming — agem generates a descriptive name for each session automatically</li>
+        <li>Pin important sessions so they appear at the top of the list</li>
+        <li>Tag sessions for organisation (<code>/sessions tag &lt;id&gt; &lt;tag&gt;</code>)</li>
+      </ul>
+    </section>
+
+    <!-- 7. MCP -->
+    <section class="features-section" id="mcp">
+      <div class="section-header">
+        <span class="section-icon">🧩</span>
+        <div>
+          <h2>MCP &amp; Extensibility</h2>
+          <p>agem implements the Model Context Protocol as a client. Drop any MCP server into your config and its tools become available to the agent automatically.</p>
+        </div>
+      </div>
+      <ul>
+        <li>MCP client supporting both <code>stdio</code> and <code>SSE</code> transport modes</li>
+        <li>List connected servers and their tools with <code>/mcp</code></li>
+        <li>Per-project instructions in <code>.agem/instructions.md</code> — automatically prepended to system prompt</li>
+        <li>Command aliases with <code>/alias &lt;name&gt; &lt;command&gt;</code> — create shortcuts for common prompts</li>
+        <li>MCP servers auto-loaded on gateway start — no manual activation needed</li>
+        <li>Tool namespacing — MCP tools prefixed with server name to avoid conflicts</li>
+      </ul>
+    </section>
+
+    <!-- 8. Tools table -->
+    <section class="features-section" id="tools">
+      <div class="section-header">
+        <span class="section-icon">🔧</span>
+        <div>
+          <h2>Built-in Tools</h2>
+          <p>21 tools covering the full development workflow. Risk tiers control which tools require approval in each execution mode.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Risk Tier</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>readFile</code></td><td><span class="risk-read">read-only</span></td><td>Read file contents</td></tr>
+            <tr><td><code>writeFile</code></td><td><span class="risk-write">write</span></td><td>Create or overwrite a file</td></tr>
+            <tr><td><code>editFile</code></td><td><span class="risk-write">write</span></td><td>Patch-based search/replace edit</td></tr>
+            <tr><td><code>listFiles</code></td><td><span class="risk-read">read-only</span></td><td>List directory contents</td></tr>
+            <tr><td><code>searchFiles</code></td><td><span class="risk-read">read-only</span></td><td>Glob-based file search</td></tr>
+            <tr><td><code>grepFiles</code></td><td><span class="risk-read">read-only</span></td><td>Content search (ripgrep)</td></tr>
+            <tr><td><code>shellExec</code></td><td><span class="risk-danger">dangerous</span></td><td>Execute a shell command</td></tr>
+            <tr><td><code>webFetch</code></td><td><span class="risk-read">read-only</span></td><td>Fetch a URL → readable text</td></tr>
+            <tr><td><code>webSearch</code></td><td><span class="risk-read">read-only</span></td><td>Search the web (DuckDuckGo)</td></tr>
+            <tr><td><code>codeIndex</code></td><td><span class="risk-read">read-only</span></td><td>Query the symbol index</td></tr>
+            <tr><td><code>memoryRead</code></td><td><span class="risk-read">read-only</span></td><td>Read daily memory files</td></tr>
+            <tr><td><code>memoryWrite</code></td><td><span class="risk-write">write</span></td><td>Append to today's memory</td></tr>
+            <tr><td><code>enterPlanMode</code></td><td><span class="risk-read">read-only</span></td><td>Switch to plan mode</td></tr>
+            <tr><td><code>exitPlanMode</code></td><td><span class="risk-read">read-only</span></td><td>Exit plan mode</td></tr>
+            <tr><td><code>askUserQuestion</code></td><td><span class="risk-read">read-only</span></td><td>Pause and ask a question</td></tr>
+            <tr><td><code>taskCreate</code></td><td><span class="risk-danger">dangerous</span></td><td>Launch a background task</td></tr>
+            <tr><td><code>taskList</code></td><td><span class="risk-read">read-only</span></td><td>List background tasks</td></tr>
+            <tr><td><code>taskGet</code></td><td><span class="risk-read">read-only</span></td><td>Get background task output</td></tr>
+            <tr><td><code>taskStop</code></td><td><span class="risk-danger">dangerous</span></td><td>Cancel a running task</td></tr>
+            <tr><td><code>enterWorktree</code></td><td><span class="risk-write">write</span></td><td>Create an isolated git worktree</td></tr>
+            <tr><td><code>exitWorktree</code></td><td><span class="risk-write">write</span></td><td>Exit worktree, merge back</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div class="cta-band">
+  <div class="container">
+    <h2>Ready to ship faster?</h2>
+    <a href="install.html" class="btn btn-primary">Install agem →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    MIT License · <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener">Open source on GitHub</a> · Built by Damien Hodgkin
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

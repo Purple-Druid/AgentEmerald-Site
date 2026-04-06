@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>agem — Documentation</title>
+  <meta name="description" content="Full documentation for agem: TUI usage, gateway daemon, channel integrations, slash commands, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="index.html" class="logo"><span class="dim">$</span> <span class="accent">agem</span></a>
+    <button id="hamburger" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <nav id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="install.html">Install</a>
+      <a href="docs.html" class="active">Docs</a>
+      <a href="compare.html">Compare</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="gh-link">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="docs-layout">
+
+  <!-- Sidebar -->
+  <aside class="docs-sidebar">
+    <nav class="docs-nav">
+      <div class="docs-nav-group">
+        <span class="docs-nav-label">Usage</span>
+        <a href="#tui-usage">TUI Usage</a>
+        <a href="#cli-flags">CLI Flags</a>
+        <a href="#keyboard">Keyboard Shortcuts</a>
+      </div>
+      <div class="docs-nav-group">
+        <span class="docs-nav-label">Gateway</span>
+        <a href="#gateway">Gateway Daemon</a>
+        <a href="#ws-api">WebSocket API</a>
+        <a href="#http-api">HTTP REST API</a>
+        <a href="#scheduler">Job Scheduler</a>
+      </div>
+      <div class="docs-nav-group">
+        <span class="docs-nav-label">Integrations</span>
+        <a href="#channels">Channel Integrations</a>
+        <a href="#mcp">MCP Integration</a>
+        <a href="#instructions">Project Instructions</a>
+      </div>
+      <div class="docs-nav-group">
+        <span class="docs-nav-label">Reference</span>
+        <a href="#commands">Slash Commands</a>
+        <a href="#tools">Built-in Tools</a>
+        <a href="#modes">Execution Modes</a>
+        <a href="#config">Configuration</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <div class="docs-content">
+
+    <section id="tui-usage" class="doc-section">
+      <h1>Documentation</h1>
+      <h2>TUI Usage</h2>
+      <pre><code># Interactive TUI
+agem
+
+# Open with an initial prompt
+agem "explain the architecture of this codebase"
+
+# Non-interactive — run one prompt and exit
+agem --message "add JSDoc to every exported function in src/utils/helpers.ts"
+
+# Resume last session
+agem --resume
+
+# Resume a specific session
+agem --resume &lt;session-id&gt;
+
+# List saved sessions
+agem --list-sessions</code></pre>
+    </section>
+
+    <section id="cli-flags" class="doc-section">
+      <h2>CLI Flags</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Flag</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>[prompt...]</code></td><td>Initial prompt sent immediately on startup</td></tr>
+            <tr><td><code>--provider &lt;name&gt;</code></td><td>LLM backend: <code>copilot</code> | <code>models</code></td></tr>
+            <tr><td><code>--model &lt;id&gt;</code></td><td>Model ID override (e.g. <code>openai/gpt-4.1</code>)</td></tr>
+            <tr><td><code>--mode &lt;mode&gt;</code></td><td>Execution mode: <code>auto-approve</code> | <code>normal</code> | <code>read-only</code> | <code>plan</code></td></tr>
+            <tr><td><code>--message &lt;text&gt;</code></td><td>Run one prompt non-interactively and exit</td></tr>
+            <tr><td><code>--resume [id]</code></td><td>Resume the latest session or a specific session</td></tr>
+            <tr><td><code>--list-sessions</code></td><td>Print saved sessions and exit</td></tr>
+            <tr><td><code>-V, --version</code></td><td>Print version and exit</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Environment Variables</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>AGEM_PROVIDER</code></td><td>Default provider</td></tr>
+            <tr><td><code>AGEM_MODEL</code></td><td>Default model ID</td></tr>
+            <tr><td><code>AGEM_MODE</code></td><td>Default execution mode</td></tr>
+            <tr><td><code>AGEM_GATEWAY_WS</code></td><td>Gateway WebSocket URL (default: <code>ws://127.0.0.1:7878</code>)</td></tr>
+            <tr><td><code>AGEM_GATEWAY_HTTP</code></td><td>Gateway HTTP URL (default: <code>http://127.0.0.1:7879</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="keyboard" class="doc-section">
+      <h2>Keyboard Shortcuts</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Shortcut</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Ctrl+C</code></td><td>Save session and quit</td></tr>
+            <tr><td><code>Ctrl+X</code></td><td>Interrupt running agent turn</td></tr>
+            <tr><td><code>Ctrl+B</code></td><td>Toggle tool activity sidebar</td></tr>
+            <tr><td><code>Ctrl+M</code></td><td>Cycle model</td></tr>
+            <tr><td><code>Ctrl+E</code></td><td>Cycle execution mode</td></tr>
+            <tr><td><code>Ctrl+V</code></td><td>Cycle reasoning summary length</td></tr>
+            <tr><td><code>Ctrl+,</code></td><td>Open settings overlay</td></tr>
+            <tr><td><code>Shift+↑ / Shift+↓</code></td><td>Scroll message history</td></tr>
+            <tr><td><code>PageUp / PageDown</code></td><td>Scroll message history one page</td></tr>
+            <tr><td><code>Ctrl+U / Ctrl+D</code></td><td>Scroll half a viewport</td></tr>
+            <tr><td><code>Home / End</code></td><td>Jump to oldest / newest messages</td></tr>
+            <tr><td><code>j / k</code> (sidebar)</td><td>Scroll tool activity sidebar</td></tr>
+            <tr><td><code>E</code> (sidebar)</td><td>Expand / collapse focused tool entry</td></tr>
+            <tr><td><code>f</code> (sidebar)</td><td>Cycle sidebar tier filter (all → read → write → shell)</td></tr>
+            <tr><td><code>?</code></td><td>Toggle keyboard help overlay</td></tr>
+            <tr><td><code>Up / Down</code></td><td>Navigate input history</td></tr>
+            <tr><td><code>Tab</code></td><td>Complete slash command</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="gateway" class="doc-section">
+      <h2>Gateway Daemon</h2>
+      <p>The gateway is a persistent background process that keeps the agent alive between TUI sessions and exposes a WebSocket + HTTP interface for external clients.</p>
+      <pre><code># Start the daemon
+agem gateway start
+
+# Check status
+agem gateway status
+
+# Stop the daemon
+agem gateway stop
+
+# Custom ports
+agem gateway start --ws-port 7878 --http-port 7879 --host 127.0.0.1</code></pre>
+      <p>When the daemon is running, the TUI connects automatically (shown as <code>⬡ gw</code> in the header). Falls back to direct mode if no daemon is found.</p>
+      <h3>Hot Reload (SIGHUP)</h3>
+      <p>Send <code>SIGHUP</code> to reload config and reconnect channels without downtime:</p>
+      <pre><code>kill -HUP $(cat ~/.agem/gateway.pid)</code></pre>
+      <p>Hot reload re-reads config, diffs channel credentials, reconnects changed channels, and reinitialises the job scheduler — leaving active sessions untouched.</p>
+    </section>
+
+    <section id="ws-api" class="doc-section">
+      <h2>WebSocket API</h2>
+      <p>Connect to <code>ws://127.0.0.1:7878</code> and send JSON messages:</p>
+      <pre><code>// Create a session
+{ "kind": "session.create", "cwd": "/path/to/project" }
+
+// Send a message
+{ "kind": "chat", "sessionId": "&lt;id&gt;", "text": "your prompt" }
+
+// List sessions
+{ "kind": "session.list" }
+
+// Interrupt a running turn
+{ "kind": "interrupt", "sessionId": "&lt;id&gt;" }</code></pre>
+      <p><strong>Inbound kinds:</strong> <code>ping</code>, <code>chat</code>, <code>session.create</code>, <code>session.resume</code>, <code>session.list</code>, <code>session.close</code>, <code>interrupt</code></p>
+      <p><strong>Outbound kinds:</strong> <code>pong</code>, <code>session.created</code>, <code>stream.delta</code>, <code>stream.done</code>, <code>message.assistant</code>, <code>tool.call</code>, <code>tool.result</code>, <code>approval.request</code>, <code>error</code>, <code>status</code></p>
+    </section>
+
+    <section id="http-api" class="doc-section">
+      <h2>HTTP REST API</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>GET</code></td><td><code>/health</code></td><td>Liveness check</td></tr>
+            <tr><td><code>GET</code></td><td><code>/status</code></td><td>Daemon status (pid, uptime, sessions, channels)</td></tr>
+            <tr><td><code>GET</code></td><td><code>/sessions</code></td><td>List active sessions</td></tr>
+            <tr><td><code>GET</code></td><td><code>/jobs</code></td><td>List scheduled jobs</td></tr>
+            <tr><td><code>POST</code></td><td><code>/jobs</code></td><td>Create a job</td></tr>
+            <tr><td><code>DELETE</code></td><td><code>/jobs/:jobId</code></td><td>Remove a job</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="scheduler" class="doc-section">
+      <h2>Job Scheduler</h2>
+      <p>Create one-shot, interval, or cron jobs via the REST API:</p>
+      <pre><code># Heartbeat every 5 minutes
+curl -X POST http://127.0.0.1:7879/jobs \
+  -H "Content-Type: application/json" \
+  -d '{"name":"heartbeat","schedule":{"every":300000},"payload":{"kind":"heartbeat"}}'
+
+# Run a shell command on a cron schedule
+curl -X POST http://127.0.0.1:7879/jobs \
+  -d '{"schedule":{"cron":"0 9 * * 1-5"},"payload":{"kind":"shell","command":"git pull"}}'
+
+# One-shot agent message
+curl -X POST http://127.0.0.1:7879/jobs \
+  -d '{"schedule":{"at":"2026-04-02T09:00:00Z"},"payload":{"kind":"agent","sessionId":"&lt;id&gt;","message":"run the test suite"}}'</code></pre>
+    </section>
+
+    <section id="channels" class="doc-section">
+      <h2>Channel Integrations</h2>
+      <p>The gateway bridges external chat platforms to the agent. Each platform gets its own isolated agent session per conversation context.</p>
+
+      <h3>Discord</h3>
+      <pre><code>pnpm add discord.js
+export AGEM_DISCORD_TOKEN=your-bot-token
+agem gateway start</code></pre>
+      <p>Responds when @mentioned in guild channels or in DMs. Session keys: <code>discord:guild:&lt;guildId&gt;-&lt;channelId&gt;</code>, <code>discord:dm:&lt;userId&gt;</code>.</p>
+
+      <h3>Telegram</h3>
+      <pre><code>pnpm add grammy
+export AGEM_TELEGRAM_BOT_TOKEN=your-bot-token
+agem gateway start</code></pre>
+      <p>Responds to all private messages and to group messages where @mentioned. Session keys: <code>telegram:chat:&lt;chatId&gt;</code>.</p>
+
+      <h3>WhatsApp</h3>
+      <pre><code>pnpm add @whiskeysockets/baileys
+agem gateway start  # QR code appears; scan with WhatsApp</code></pre>
+      <p>Auth credentials saved to <code>~/.agem/wa-auth/</code> — scan once, reconnects automatically. <code>AGEM_WA_GROUPS=1</code> responds in all group messages.</p>
+
+      <h3>Matrix</h3>
+      <pre><code>pnpm add matrix-js-sdk
+export AGEM_MATRIX_HOMESERVER=https://matrix.org
+export AGEM_MATRIX_USER_ID=@yourbotname:matrix.org
+export AGEM_MATRIX_TOKEN=&lt;access-token&gt;
+agem gateway start</code></pre>
+      <p>Invite the bot to any room and it joins automatically. <code>AGEM_MATRIX_MENTION_ONLY=0</code> responds in all rooms regardless of mention.</p>
+    </section>
+
+    <section id="commands" class="doc-section">
+      <h2>Slash Commands</h2>
+      <p>Type <code>/</code> in the input bar to see all commands with tab completion.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Command</th><th>Aliases</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>/help [cmd]</code></td><td><code>/h</code>, <code>/?</code></td><td>List commands, or detailed help for one</td></tr>
+            <tr><td><code>/clear [--keep N]</code></td><td></td><td>Clear conversation (optionally keep last N)</td></tr>
+            <tr><td><code>/compact [--dry-run]</code></td><td></td><td>Summarise and compact conversation context</td></tr>
+            <tr><td><code>/sessions</code></td><td></td><td>List / search / manage saved sessions</td></tr>
+            <tr><td><code>/sessions search &lt;q&gt;</code></td><td></td><td>Full-text search across all sessions</td></tr>
+            <tr><td><code>/sessions merge &lt;id&gt;</code></td><td></td><td>Merge another session into current</td></tr>
+            <tr><td><code>/sessions diff &lt;id&gt;</code></td><td></td><td>Show messages added/removed vs another session</td></tr>
+            <tr><td><code>/export [markdown|json]</code></td><td><code>/ex</code></td><td>Export session to file</td></tr>
+            <tr><td><code>/branch-session [label]</code></td><td><code>/fork</code></td><td>Fork current session into a new one</td></tr>
+            <tr><td><code>/model [id|task|list]</code></td><td></td><td>Change model, suggest for a task, or list all</td></tr>
+            <tr><td><code>/provider [name]</code></td><td></td><td>Switch LLM provider</td></tr>
+            <tr><td><code>/mode [mode]</code></td><td></td><td>Change execution mode</td></tr>
+            <tr><td><code>/status</code></td><td></td><td>Show git status</td></tr>
+            <tr><td><code>/commit &lt;msg&gt;</code></td><td><code>/ci</code></td><td>Stage and commit changes</td></tr>
+            <tr><td><code>/branch &lt;name&gt;</code></td><td></td><td>Create and switch to a new branch</td></tr>
+            <tr><td><code>/diff</code></td><td></td><td>Show current git diff</td></tr>
+            <tr><td><code>/pr</code></td><td></td><td>Draft a pull request description</td></tr>
+            <tr><td><code>/plan &lt;task&gt;</code></td><td></td><td>Generate an implementation plan</td></tr>
+            <tr><td><code>/review</code></td><td></td><td>AI-powered code review of staged changes</td></tr>
+            <tr><td><code>/release [--bump patch|minor|major]</code></td><td><code>/rel</code></td><td>Run release pipeline</td></tr>
+            <tr><td><code>/verify [--watch]</code></td><td></td><td>Run build + test verification loop</td></tr>
+            <tr><td><code>/refactor &lt;old&gt; &lt;new&gt;</code></td><td><code>/rename</code></td><td>Cross-file symbol rename</td></tr>
+            <tr><td><code>/delegate &lt;task&gt;</code></td><td><code>/del</code></td><td>Spawn a focused subagent</td></tr>
+            <tr><td><code>/index</code></td><td></td><td>Build / refresh semantic code index</td></tr>
+            <tr><td><code>/search &lt;query&gt;</code></td><td></td><td>Search the code index</td></tr>
+            <tr><td><code>/mcp</code></td><td></td><td>Manage MCP server connections</td></tr>
+            <tr><td><code>/instructions</code></td><td></td><td>Show loaded project instructions</td></tr>
+            <tr><td><code>/tools</code></td><td></td><td>List available tools and risk tiers</td></tr>
+            <tr><td><code>/panel [on|off|status]</code></td><td></td><td>Toggle tool activity sidebar</td></tr>
+            <tr><td><code>/undo</code></td><td><code>/u</code></td><td>Undo last file write</td></tr>
+            <tr><td><code>/tag [label]</code></td><td></td><td>Set / show / clear session name</td></tr>
+            <tr><td><code>/note &lt;text&gt;</code></td><td></td><td>Attach a note to the session</td></tr>
+            <tr><td><code>/alias &lt;name&gt; &lt;cmd&gt;</code></td><td></td><td>Define a command alias</td></tr>
+            <tr><td><code>/history [clear]</code></td><td><code>/hist</code></td><td>Show / clear input history</td></tr>
+            <tr><td><code>/stats</code></td><td></td><td>Token and cost usage by model</td></tr>
+            <tr><td><code>/config [key value]</code></td><td><code>/cfg</code></td><td>Show / set / save configuration</td></tr>
+            <tr><td><code>/env [key value]</code></td><td></td><td>Show / set session environment variables</td></tr>
+            <tr><td><code>/log</code></td><td></td><td>Show session event log</td></tr>
+            <tr><td><code>/context [n]</code></td><td></td><td>Show recent context window</td></tr>
+            <tr><td><code>/recent</code></td><td></td><td>Show recently edited files</td></tr>
+            <tr><td><code>/back</code></td><td></td><td>Undo last assistant message</td></tr>
+            <tr><td><code>/retry [n]</code></td><td></td><td>Re-run last N messages</td></tr>
+            <tr><td><code>/goto &lt;label&gt;</code></td><td></td><td>Jump to message index or label</td></tr>
+            <tr><td><code>/focus &lt;topic&gt;</code></td><td></td><td>Inject a focus prompt</td></tr>
+            <tr><td><code>/telemetry</code></td><td></td><td>Toggle telemetry</td></tr>
+            <tr><td><code>/selfhost</code></td><td></td><td>Run self-build workflow</td></tr>
+            <tr><td><code>/quit</code></td><td><code>/exit</code></td><td>Save session and exit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tools" class="doc-section">
+      <h2>Built-in Tools</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tool</th><th>Risk</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>readFile</code></td><td><span class="risk-read">read-only</span></td><td>Read file contents</td></tr>
+            <tr><td><code>writeFile</code></td><td><span class="risk-write">write</span></td><td>Create or overwrite a file</td></tr>
+            <tr><td><code>editFile</code></td><td><span class="risk-write">write</span></td><td>Patch-based search/replace edit</td></tr>
+            <tr><td><code>listFiles</code></td><td><span class="risk-read">read-only</span></td><td>List directory contents</td></tr>
+            <tr><td><code>searchFiles</code></td><td><span class="risk-read">read-only</span></td><td>Glob-based file search</td></tr>
+            <tr><td><code>grepFiles</code></td><td><span class="risk-read">read-only</span></td><td>Content search (ripgrep)</td></tr>
+            <tr><td><code>shellExec</code></td><td><span class="risk-danger">dangerous</span></td><td>Execute a shell command</td></tr>
+            <tr><td><code>webFetch</code></td><td><span class="risk-read">read-only</span></td><td>Fetch a URL → readable text</td></tr>
+            <tr><td><code>webSearch</code></td><td><span class="risk-read">read-only</span></td><td>Search the web (DuckDuckGo)</td></tr>
+            <tr><td><code>codeIndex</code></td><td><span class="risk-read">read-only</span></td><td>Query the symbol index</td></tr>
+            <tr><td><code>memoryRead</code></td><td><span class="risk-read">read-only</span></td><td>Read daily memory files</td></tr>
+            <tr><td><code>memoryWrite</code></td><td><span class="risk-write">write</span></td><td>Append to today's memory</td></tr>
+            <tr><td><code>enterPlanMode</code></td><td><span class="risk-read">read-only</span></td><td>Switch to plan mode (read-only enforced)</td></tr>
+            <tr><td><code>exitPlanMode</code></td><td><span class="risk-read">read-only</span></td><td>Exit plan mode, restore previous mode</td></tr>
+            <tr><td><code>askUserQuestion</code></td><td><span class="risk-read">read-only</span></td><td>Pause and ask the user a question</td></tr>
+            <tr><td><code>taskCreate</code></td><td><span class="risk-danger">dangerous</span></td><td>Launch a background shell/agent task</td></tr>
+            <tr><td><code>taskList</code></td><td><span class="risk-read">read-only</span></td><td>List all background tasks</td></tr>
+            <tr><td><code>taskGet</code></td><td><span class="risk-read">read-only</span></td><td>Get output from a background task</td></tr>
+            <tr><td><code>taskStop</code></td><td><span class="risk-danger">dangerous</span></td><td>Cancel a running background task</td></tr>
+            <tr><td><code>enterWorktree</code></td><td><span class="risk-write">write</span></td><td>Create an isolated git worktree</td></tr>
+            <tr><td><code>exitWorktree</code></td><td><span class="risk-write">write</span></td><td>Exit worktree, optionally merge back</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="modes" class="doc-section">
+      <h2>Execution Modes</h2>
+      <p>Every tool call is classified before execution:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Mode</th><th>Read-only tools</th><th>Write tools</th><th>Shell / tasks</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>auto-approve</code></td><td>✅ Allow</td><td>✅ Allow</td><td>✅ Allow</td></tr>
+            <tr><td><code>normal</code></td><td>✅ Allow</td><td>⚠️ Prompt</td><td>⚠️ Prompt</td></tr>
+            <tr><td><code>read-only</code></td><td>✅ Allow</td><td>❌ Deny</td><td>❌ Deny</td></tr>
+            <tr><td><code>plan</code></td><td>✅ Allow</td><td>❌ Deny</td><td>❌ Deny</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="callout warning"><strong>⚠️ Note:</strong> <code>auto-approve</code> allows the agent to write files and run shell commands without confirmation. Use <code>normal</code> mode when working in unfamiliar codebases.</p>
+    </section>
+
+    <section id="config" class="doc-section">
+      <h2>Configuration</h2>
+      <p>agem loads config from two files and merges them (project values override user values):</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>File</th><th>Scope</th></tr></thead>
+          <tbody>
+            <tr><td><code>~/.agem/config.json</code></td><td>User-global defaults</td></tr>
+            <tr><td><code>.agem-config.json</code></td><td>Project-level overrides</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <pre><code>{
+  "version": 1,
+  "provider": "copilot",
+  "modelId": "openai/gpt-4.1",
+  "mode": "normal",
+  "reasoningSummaryLength": "brief"
+}</code></pre>
+    </section>
+
+    <section id="mcp" class="doc-section">
+      <h2>MCP Integration</h2>
+      <p>Add MCP servers to <code>.agem/mcp.json</code> (project) or <code>~/.agem/mcp.json</code> (global):</p>
+      <pre><code>{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+    },
+    "remote-api": {
+      "url": "http://localhost:3001/sse",
+      "headers": { "Authorization": "Bearer &lt;token&gt;" }
+    }
+  }
+}</code></pre>
+      <p>Use <code>/mcp</code> in the TUI to list connected servers and their tools. MCP health is shown as colored dots in the header.</p>
+    </section>
+
+    <section id="instructions" class="doc-section">
+      <h2>Project Instructions</h2>
+      <p>Create <code>.agem/instructions.md</code> in your project root to give the agent persistent context — coding conventions, architecture notes, or task-specific guidance. Loaded automatically on startup and injected into every conversation turn.</p>
+      <pre><code># My Project
+
+## Conventions
+- Use TypeScript strict mode
+- Prefer functional components in React
+- All exports must have JSDoc comments
+
+## Architecture
+The app follows a layered architecture:
+- src/api/     → REST endpoint handlers
+- src/domain/  → Business logic, no framework deps
+- src/infra/   → Database, external services</code></pre>
+    </section>
+
+  </div><!-- /docs-content -->
+</main>
+
+<footer>
+  <div class="container">
+    MIT License · <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener">Open source on GitHub</a> · Built by Damien Hodgkin
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  // Docs sidebar active link on scroll
+  const sections = document.querySelectorAll('.doc-section');
+  const navLinks = document.querySelectorAll('.docs-nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`.docs-nav a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
