@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>agem — AI coding agent for the terminal</title>
+  <meta name="description" content="agem reads your code, writes patches, runs commands, and bridges to Discord and WhatsApp — all from a persistent daemon.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="index.html" class="logo"><span class="dim">$</span> <span class="accent">agem</span></a>
+    <button id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="install.html">Install</a>
+      <a href="docs.html">Docs</a>
+      <a href="compare.html">Compare</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="gh-link">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero" style="border-bottom:1px solid var(--border);">
+    <div class="container">
+      <h1>An AI coding agent for the terminal — and beyond.</h1>
+      <p class="lead">
+        <code>agem</code> reads your code, writes patches, runs commands, and bridges to Discord and WhatsApp —
+        all from a persistent daemon that keeps working after you close the window.
+      </p>
+
+      <div class="install-block">
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/Purple-Druid/AgentEmerald/main/install.sh | sh</code></pre>
+      </div>
+
+      <div class="hero-actions">
+        <a href="install.html" class="btn btn-primary">Get Started →</a>
+        <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener" class="btn btn-outline">View on GitHub ↗</a>
+      </div>
+
+      <p class="trust-bar">MIT License · GitHub account only · macOS · Linux · Windows</p>
+    </div>
+  </section>
+
+  <!-- Feature Highlights -->
+  <section id="features">
+    <div class="container">
+      <h2>Everything you need. Nothing you don't.</h2>
+      <p class="section-desc">agem is built terminal-first, designed for developers who live in the shell — with integrations that let you reach your codebase from anywhere.</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="icon">🖥️</span>
+          <h3>Terminal-first TUI</h3>
+          <p>Streaming markdown, live tool sidebar, diff previews before any write, full keyboard control.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">⚙️</span>
+          <h3>Always-on daemon</h3>
+          <p>Persistent gateway with WebSocket + HTTP API, SQLite sessions, job scheduler, hot reload.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">📱</span>
+          <h3>Chat platform bridges</h3>
+          <p>Discord, Telegram, WhatsApp, Matrix. Reach your codebase from anywhere, any device.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🔑</span>
+          <h3>No extra API keys</h3>
+          <p>GitHub Copilot or GitHub Models. <code>gh auth login</code> is all it takes to get started.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🛡️</span>
+          <h3>Safety built in</h3>
+          <p>Four execution modes. Every tool call classified. Diff previews. Approval dialogs.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🧩</span>
+          <h3>MCP integration</h3>
+          <p>Connect any MCP server via config. Stdio or SSE. Auto-loaded on start.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison teaser -->
+  <section>
+    <div class="container">
+      <div class="compare-teaser">
+        <h2>How does agem stack up?</h2>
+        <span class="muted">agem brings a unique combination of terminal UX, always-on daemon, and messaging bridges.</span>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th class="center">agem</th>
+                <th class="center">Claude Code</th>
+                <th class="center">Cursor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Terminal TUI</td>
+                <td class="center badge">✅</td>
+                <td class="center badge">✅</td>
+                <td class="center badge">❌</td>
+              </tr>
+              <tr>
+                <td>Always-on daemon</td>
+                <td class="center badge">✅</td>
+                <td class="center badge">❌</td>
+                <td class="center badge">❌</td>
+              </tr>
+              <tr>
+                <td>Chat bridges</td>
+                <td class="center badge">✅</td>
+                <td class="center badge">❌</td>
+                <td class="center badge">❌</td>
+              </tr>
+              <tr>
+                <td>Free (GitHub account)</td>
+                <td class="center badge">✅</td>
+                <td class="center badge">❌</td>
+                <td class="center badge">❌</td>
+              </tr>
+              <tr>
+                <td>Open source (MIT)</td>
+                <td class="center badge">✅</td>
+                <td class="center badge">❌</td>
+                <td class="center badge">❌</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="compare.html" class="full-link">Full comparison →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CTA Band -->
+<div class="cta-band">
+  <div class="container">
+    <h2>Ready to ship faster?</h2>
+    <a href="install.html" class="btn btn-primary">Install agem →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    MIT License · <a href="https://github.com/Purple-Druid/AgentEmerald" target="_blank" rel="noopener">Open source on GitHub</a> · Built by Damien Hodgkin
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
